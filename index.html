@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colegio Montano - Interactive Study Guide | Grammar 3rd Grade</title>
+    <style>
+        :root {
+            --primary-blue: #1269A8;
+            --accent-yellow: #F7D615;
+            --secondary-teal: #54887D;
+            --card-blue: #88B5C7;
+            --olive-label: #A6B046;
+            --soft-white: #F2F5E9;
+            --dark-text: #2C3E50;
+            --white: #FFFFFF;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--soft-white);
+            color: var(--dark-text);
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .board-container {
+            width: 100%;
+            max-width: 1200px;
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(18, 105, 168, 0.15);
+            border: 5px solid var(--accent-yellow);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Header Styles */
+        .board-header {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid var(--accent-yellow);
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .school-logo {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--accent-yellow);
+            background: var(--white);
+        }
+
+        .header-titles h1 {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--white);
+        }
+
+        .header-titles p {
+            font-size: 0.95rem;
+            color: var(--accent-yellow);
+        }
+
+        .fullscreen-btn {
+            background-color: var(--accent-yellow);
+            color: var(--dark-text);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .fullscreen-btn:hover {
+            background-color: #e5c40d;
+            transform: scale(1.05);
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            background-color: #e9ecef;
+            border-bottom: 2px solid var(--secondary-teal);
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 14px 20px;
+            background: none;
+            border: none;
+            font-size: 1rem;
+            font-weight: bold;
+            color: var(--secondary-teal);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            text-align: center;
+        }
+
+        .tab-btn:hover {
+            background-color: rgba(84, 136, 125, 0.1);
+            color: var(--primary-blue);
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border-bottom: 4px solid var(--accent-yellow);
+        }
+
+        /* Content Area */
+        .board-body {
+            padding: 30px;
+            background-color: var(--soft-white);
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Section Typography & Cards */
+        h2.section-title {
+            color: var(--primary-blue);
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--secondary-teal);
+            padding-bottom: 5px;
+        }
+
+        h3.subsection-title {
+            color: var(--secondary-teal);
+            font-size: 1.25rem;
+            margin: 25px 0 10px 0;
+        }
+
+        p.section-desc {
+            font-size: 1.05rem;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .theory-box {
+            background: var(--white);
+            border-left: 6px solid var(--primary-blue);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .grammar-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: var(--white);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .grammar-table th, .grammar-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .grammar-table th {
+            background-color: var(--secondary-teal);
+            color: var(--white);
+        }
+
+        .level-badge {
+            display: inline-block;
+            background-color: var(--olive-label);
+            color: var(--white);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .card {
+            background: var(--white);
+            border: 2px solid var(--secondary-teal);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .card-header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .solution-box {
+            background-color: var(--card-blue);
+            color: var(--dark-text);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+            border-left: 5px solid var(--primary-blue);
+        }
+
+        .solution-box.show {
+            display: block;
+        }
+
+        .toggle-btn {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .toggle-btn:hover {
+            background-color: #0e5384;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .footer-note {
+            text-align: center;
+            padding: 12px;
+            background-color: var(--primary-blue);
+            color: var(--white);
+            font-size: 0.85rem;
+            border-top: 2px solid var(--accent-yellow);
+        }
+    </style>
+</head>
+<body>
+
+<div class="board-container" id="boardContainer">
+    <!-- Header -->
+    <div class="board-header">
+        <div class="header-brand">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyEop0yf6lZ7Jk9MILZxF1rBj4Oqs5esyhIQ&s" alt="Colegio Montano Logo" class="school-logo">
+            <div class="header-titles">
+                <h1>Colegio Montano - Digital Whiteboard</h1>
+                <p>Third Grade English | Our World 3 (Unit 5: Grammar 1 & Grammar 2)</p>
+            </div>
+        </div>
+        <button class="fullscreen-btn" onclick="toggleFullscreen()">[ ⛶ Fullscreen ]</button>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab('theory')">1. Theory</button>
+        <button class="tab-btn" onclick="switchTab('examples')">2. Examples (15)</button>
+        <button class="tab-btn" onclick="switchTab('exercises')">3. Exercises (15)</button>
+        <button class="tab-btn" onclick="switchTab('reflection')">4. Reflection</button>
+        <button class="tab-btn" onclick="switchTab('evaluation')">5. Evaluation</button>
+    </div>
+
+    <!-- Board Body Content -->
+    <div class="board-body">
+
+        <!-- TAB 1: THEORY -->
+        <div id="theory" class="tab-content active">
+            <h2 class="section-title">Unit 5 Grammar Reference - Our World 3</h2>
+            <p class="section-desc">Welcome to your digital board! Review the key grammatical structures for Unit 5: Asking questions with <strong>Why...? / Because...</strong> and expressing purpose using <strong>Infinitives of Purpose (to + verb)</strong>.</p>
+
+            <div class="theory-box">
+                <h3 class="subsection-title" style="margin-top:0;">Grammar 1: Asking "Why...?" and Answering with "Because..."</h3>
+                <p>We use <strong>Why</strong> to ask about reasons, and we answer with <strong>Because</strong> to explain the reason why something happens or why animals/people behave in a certain way.</p>
+                <table class="grammar-table">
+                    <tr>
+                        <th>Question Word</th>
+                        <th>Auxiliary / Verb</th>
+                        <th>Subject</th>
+                        <th>Main Verb / Complement</th>
+                        <th>Answer Starter</th>
+                        <th>Subject</th>
+                        <th>Reason / Explanation</th>
+                    </tr>
+                    <tr>
+                        <td rowspan="4"><strong>Why</strong></td>
+                        <td>do</td>
+                        <td>snakes</td>
+                        <td>come out during the day?</td>
+                        <td rowspan="4"><strong>Because</strong></td>
+                        <td>they</td>
+                        <td>like the sun.</td>
+                    </tr>
+                    <tr>
+                        <td>don't</td>
+                        <td>you</td>
+                        <td>like crocodiles?</td>
+                        <td>they</td>
+                        <td>are scary.</td>
+                    </tr>
+                    <tr>
+                        <td>can</td>
+                        <td>frogs</td>
+                        <td>jump high?</td>
+                        <td>they</td>
+                        <td>have strong legs.</td>
+                    </tr>
+                    <tr>
+                        <td>can't</td>
+                        <td>birds</td>
+                        <td>climb trees?</td>
+                        <td>they</td>
+                        <td>don't have arms.</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="theory-box">
+                <h3 class="subsection-title" style="margin-top:0;">Grammar 2: Infinitive of Purpose (to + verb)</h3>
+                <p>We use an <strong>infinitive of purpose</strong> (to + base verb) to explain <em>why</em> someone uses something or <em>why</em> animals/people perform an action.</p>
+                <table class="grammar-table">
+                    <tr>
+                        <th>Subject</th>
+                        <th>Verb</th>
+                        <th>Possessive / Object</th>
+                        <th>Body Part / Tool</th>
+                        <th>Infinitive of Purpose</th>
+                        <th>Additional Detail</th>
+                    </tr>
+                    <tr>
+                        <td>Parrots</td>
+                        <td>use</td>
+                        <td>their</td>
+                        <td>wings</td>
+                        <td><strong>to fly.</strong></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Cats</td>
+                        <td>use</td>
+                        <td>their</td>
+                        <td>tongues</td>
+                        <td><strong>to clean</strong></td>
+                        <td>their fur.</td>
+                    </tr>
+                    <tr>
+                        <td>Kangaroos</td>
+                        <td>use</td>
+                        <td>their</td>
+                        <td>pouches</td>
+                        <td><strong>to carry</strong></td>
+                        <td>their babies.</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB 2: EXAMPLES -->
+        <div id="examples" class="tab-content">
+            <h2 class="section-title">Resolved Examples (15 Total)</h2>
+            <p class="section-desc">Study these carefully structured examples across Basic, Intermediate, and Advanced levels.</p>
+
+            <!-- BASIC EXAMPLES -->
+            <span class="level-badge">Basic Level (1 to 5)</span>
+            
+            <div class="card">
+                <h3>Example 1: Why question (Do)</h3>
+                <p><strong>Question:</strong> Why do fish swim in the ocean?</p>
+                <p><strong>Answer:</strong> Because they live in water.</p>
+                <p style="color:var(--secondary-teal); font-size:0.9rem; margin-top:5px;"><em>Explanation:</em> Uses present simple auxiliary "do" for general facts about animals.</p>
+            </div>
+
+            <div class="card">
+                <h3>Example 2: Why question (Don't)</h3>
+                <p><strong>Question:</strong> Why don't monkeys live in the snow?</p>
+                <p><strong>Answer:</strong> Because they like warm climates.</p>
+                <p style="color:var(--secondary-teal); font-size:0.9rem; margin-top:5px;"><em>Explanation:</em> Uses negative auxiliary "don't" to ask about animal habits.</p>
+            </div>
+
+            <div class="card">
+                <h3>Example 3: Why question (Can)</h3>
+                <p><strong>Question:</strong> Why can monkeys climb trees?</p>
+                <p><strong>Answer:</strong> Because they have long arms and tails.</p>
+                <p style="color:var(--secondary-teal); font-size:0.9rem; margin-top:5px;"><em>Explanation:</em> Uses modal verb "can" inquiring about animal physical ability.</p>
+            </div>
+
+            <div class="card">
+                <h3>Example 4: Infinitive of Purpose (Teeth)</h3>
+                <p><strong>Sentence:</strong> Sharks use their sharp teeth <strong>to eat</strong> fish.</p>
+                <p style="color:var(--secondary-teal); font-size:0.9rem; margin-top:5px;"><em>Explanation:</em> Connects body part (teeth) directly with purpose using "to + eat".</p>
+            </div>
+
+            <div class="card">
+                <h3>Example 5: Infinitive of Purpose (Wings)</h3>
+                <p><strong>Sentence:</strong> Eagles use their wings <strong>to fly</strong> high in the sky.</p>
+                <p style="color:var(--secondary-teal); font-size:0.9rem; margin-top:5px;"><em>Explanation:</em> Identifies bird anatomy and its primary function.</p>
+            </div>
+
+            <!-- INTERMEDIATE EXAMPLES -->
+            <span class="level-badge" style="background-color: var(--primary-blue);">Intermediate Level (6 to 10)</span>
+
+            <div class="card">
+                <h3>Example 6: Habitat and Environment Query</h3>
+                <p><strong>Question:</strong> Why is the rabbit going underground?</p>
+                <p><strong>Answer:</strong> Because its home is underground.</p>
+                <p style="color:var(--secondary-teal); font-size:0.9rem; margin-top:5px;"><em>Explanation:</em> Combines "Why is" (present continuous context) with possessive pronoun "its".</p>
+            </div>
+
+            <div class="card">
+                <h3>Example 7: Behavior and Climate</h3>
+                <p><strong>Question:</strong> Why are the elephants in the water?</p>
+                <p><strong>Answer:</strong> Because the sun is hot, and elephants feel cool in the water.</p>
+                <p style="color:var(--secondary-teal); font-size:0.9rem; margin-top:5px;"><em>Explanation:</em> Multi-clause explanation combining environmental temperature and animal comfort.</p>
+            </div>
+
+            <div class="card">
+                <h3>Example 8: Infinitive with Complex Object</h3>
+                <p><strong>Sentence:</strong> Polar bears use their thick white fur <strong>to keep warm</strong> in the ice and snow.</p>
+                <p style="color:var(--secondary-teal); font-size:0.9rem; margin-top:5px;"><em>Explanation:</em> Utilizes a two-word infinitive phrase "to keep warm" with environmental context.</p>
+            </div>
+
+            <div class="card">
+                <h3>Example 9: Modal Can't Query</h3>
+                <p><strong>Question:</strong> Why can't penguins fly in the sky?</p>
+                <p><strong>Answer:</strong> Because their wings are adapted to swim in the ocean.</p>
+                <p style="color:var(--secondary-teal); font-size:0.9rem; margin-top:5px;"><em>Explanation:</em> Explores negative modal capability ("can't") with specialized adaptation.</p>
+            </div>
+
+            <div class="card">
+                <h3>Example 10: Infinitive for Protection</h3>
+                <p><strong>Sentence:</strong> Turtles use their hard shells <strong>to protect</strong> themselves from predators.</p>
+                <p style="color:var(--secondary-teal); font-size:0.9rem; margin-top:5px;"><em>Explanation:</em> Links anatomy to defensive purpose using reflexive pronouns.</p>
+            </div>
+
+            <!-- ADVANCED EXAMPLES -->
+            <span class="level-badge" style="background-color: var(--secondary-teal);">Advanced Level (11 to 15)</span>
+
+            <div class="card">
+                <h3>Example 11: Multi-conditional Habitat Interaction</h3>
+                <p><strong>Question:</strong> Why do zebras run when they see lions in the grasslands?</p>
+                <p><strong>Answer:</strong> Because they are scared, and they need to escape danger.</p>
+                <p style="color:var(--secondary-teal); font-size:0.9rem; margin-top:5px;"><em>Explanation:</em> Combines "Why do", dependent time/condition clauses ("when they see"), and multiple reasons.</p>
+            </div>
+
+            <div class="card">
+                <h3>Example 12: Complex Infinitive of Purpose (Giraffes)</h3>
+                <p><strong>Sentence:</strong> Giraffes use their long necks and long tongues <strong>to reach</strong> leaves high up in acacia trees.</p>
+                <p style="color:var(--secondary-teal); font-size:0.9rem; margin-top:5px;"><em>Explanation:</em> Combines two body parts with an expanded infinitive phrase describing precise ecological behavior.</p>
+            </div>
+
+            <div class="card">
+                <h3>Example 13: Comparative Behavior Query</h3>
+                <p><strong>Question:</strong> Why do nocturnal animals hunt at night instead of during the day?</p>
+                <p><strong>Answer:</strong> Because it is cooler and helps them avoid daytime predators.</p>
+                <p style="color:var(--secondary-teal); font-size:0.9rem; margin-top:5px;"><em>Explanation:</em> Integrates advanced ecological vocabulary ("nocturnal", "predators") within a comparative framework.</p>
+            </div>
+
+            <div class="card">
+                <h3>Example 14: Specialized Anatomical Purpose</h3>
+                <p><strong>Sentence:</strong> Chameleons use their color-changing skin <strong>to camouflage</strong> themselves and communicate with other chameleons.</p>
+                <p style="color:var(--secondary-teal); font-size:0.9rem; margin-top:5px;"><em>Explanation:</em> Features dual compound purposes joined by "and" following the infinitive marker "to".</p>
+            </div>
+
+            <div class="card">
+                <h3>Example 15: Complex Ecosystem Interdependence</h3>
+                <p><strong>Question:</strong> Why are birds important in wetlands like swamps and marshes?</p>
+                <p><strong>Answer:</strong> Because they control insect populations, and their movements help maintain ecosystem balance.</p>
+                <p style="color:var(--secondary-teal); font-size:0.9rem; margin-top:5px;"><em>Explanation:</em> Synthesizes scientific inquiry ("Why are") with systemic environmental consequence.</p>
+            </div>
+        </div>
+
+        <!-- TAB 3: EXERCISES -->
+        <div id="exercises" class="tab-content">
+            <h2 class="section-title">Practice Exercises (15 Total with Step-by-Step Solutions)</h2>
+            <p class="section-desc">Test your understanding! Try solving each problem on your own, then click "Show Solution" to check your work.</p>
+
+            <!-- BASIC EXERCISES -->
+            <span class="level-badge">Basic Level Exercises (1 to 5)</span>
+
+            <div class="card">
+                <div class="card-header-flex">
+                    <h3>Exercise 1 (Why / Because)</h3>
+                    <button class="toggle-btn" onclick="toggleSol('sol-ex1')">Show Solution</button>
+                </div>
+                <p><strong>Complete:</strong> ______ fish run? — ______ they don't have legs.</p>
+                <div id="sol-ex1" class="solution-box">
+                    <p><strong>Step-1:</strong> Identify the subject ("fish") and the action ("run").</p>
+                    <p><strong>Step-2:</strong> Determine the auxiliary for fish (plural noun = don't) and start question with "Why".</p>
+                    <p><strong>Step-3:</strong> Answer reason using "Because".</p>
+                    <p><strong>Correct Answer:</strong> <em>Why don't</em> fish run? — <em>Because</em> they don't have legs.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header-flex">
+                    <h3>Exercise 2 (Why / Because)</h3>
+                    <button class="toggle-btn" onclick="toggleSol('sol-ex2')">Show Solution</button>
+                </div>
+                <p><strong>Complete:</strong> ______ hippos stand in water? — ______ the sun is hot, and hippos feel cool.</p>
+                <div id="sol-ex2" class="solution-box">
+                    <p><strong>Step-1:</strong> Check subject ("hippos", plural) and verb ("stand").</p>
+                    <p><strong>Step-2:</strong> Use auxiliary "do" for the question.</p>
+                    <p><strong>Step-3:</strong> Answer with "Because".</p>
+                    <p><strong>Correct Answer:</strong> <em>Do</em> hippos stand in water? — <em>Because</em> the sun is hot...</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header-flex">
+                    <h3>Exercise 3 (Infinitive of Purpose)</h3>
+                    <button class="toggle-btn" onclick="toggleSol('sol-ex3')">Show Solution</button>
+                </div>
+                <p><strong>Complete:</strong> Goats use their horns ______.</p>
+                <div id="sol-ex3" class="solution-box">
+                    <p><strong>Step-1:</strong> Recall what goats do with horns (defend / fight).</p>
+                    <p><strong>Step-2:</strong> Form infinitive using "to + verb" (to fight).</p>
+                    <p><strong>Correct Answer:</strong> Goats use their horns <strong>to fight</strong>.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header-flex">
+                    <h3>Exercise 4 (Infinitive of Purpose)</h3>
+                    <button class="toggle-btn" onclick="toggleSol('sol-ex4')">Show Solution</button>
+                </div>
+                <p><strong>Complete:</strong> Lions use their teeth ______ meat.</p>
+                <div id="sol-ex4" class="solution-box">
+                    <p><strong>Step-1:</strong> Identify the tool ("teeth") and action with meat ("eat").</p>
+                    <p><strong>Step-2:</strong> Apply infinitive structure "to eat".</p>
+                    <p><strong>Correct Answer:</strong> Lions use their teeth <strong>to eat</strong> meat.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header-flex">
+                    <h3>Exercise 5 (Why question form)</h3>
+                    <button class="toggle-btn" onclick="toggleSol('sol-ex5')">Show Solution</button>
+                </div>
+                <p><strong>Complete:</strong> ______ the desert dry? — ______ there is very little rain.</p>
+                <div id="sol-ex5" class="solution-box">
+                    <p><strong>Step-1:</strong> The main verb is "is" (to be), not an action verb.</p>
+                    <p><strong>Step-2:</strong> Form question with "Why is".</p>
+                    <p><strong>Correct Answer:</strong> <em>Why is</em> the desert dry? — <em>Because</em> there is very little rain.</p>
+                </div>
+            </div>
+
+            <!-- INTERMEDIATE EXERCISES -->
+            <span class="level-badge" style="background-color: var(--primary-blue);">Intermediate Level Exercises (6 to 10)</span>
+
+            <div class="card">
+                <div class="card-header-flex">
+                    <h3>Exercise 6 (Why / Because Matching)</h3>
+                    <button class="toggle-btn" onclick="toggleSol('sol-ex6')">Show Solution</button>
+                </div>
+                <p><strong>Match & Complete:</strong> Why are the zebras running? — Match with: [ Because they see a lion, and they are scared. ]</p>
+                <div id="sol-ex6" class="solution-box">
+                    <p><strong>Step-1:</strong> Analyze present continuous question ("are... running").</p>
+                    <p><strong>Step-2:</strong> Connect flight behavior with predator stimulus (lion).</p>
+                    <p><strong>Correct Answer:</strong> Because they see a lion, and they are scared.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header-flex">
+                    <h3>Exercise 7 (Infinitive: Polar Bears)</h3>
+                    <button class="toggle-btn" onclick="toggleSol('sol-ex7')">Show Solution</button>
+                </div>
+                <p><strong>Complete:</strong> Polar bears use their white fur ______ in the ice and snow.</p>
+                <div id="sol-ex7" class="solution-box">
+                    <p><strong>Step-1:</strong> Think about camouflage and cold weather.</p>
+                    <p><strong>Step-2:</strong> Use "to hide" or "to keep warm".</p>
+                    <p><strong>Correct Answer:</strong> ...use their white fur <strong>to hide</strong> / <strong>to keep warm</strong> in the ice and snow.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header-flex">
+                    <h3>Exercise 8 (Why question: Birds in Wetlands)</h3>
+                    <button class="toggle-btn" onclick="toggleSol('sol-ex8')">Show Solution</button>
+                </div>
+                <p><strong>Complete:</strong> ______ the birds in the wetlands? — ______ they eat frogs and fish.</p>
+                <div id="sol-ex8" class="solution-box">
+                    <p><strong>Step-1:</strong> Subject is plural ("the birds"), verb is prepositional location.</p>
+                    <p><strong>Step-2:</strong> Form question: "Why are the birds in the wetlands?"</p>
+                    <p><strong>Correct Answer:</strong> <em>Why are</em> the birds in the wetlands? — <em>Because</em> they eat frogs and fish.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header-flex">
+                    <h3>Exercise 9 (Infinitive: Giraffes)</h3>
+                    <button class="toggle-btn" onclick="toggleSol('sol-ex9')">Show Solution</button>
+                </div>
+                <p><strong>Complete:</strong> Giraffes use their long tongues ______.</p>
+                <div id="sol-ex9" class="solution-box">
+                    <p><strong>Step-1:</strong> What do giraffes reach with tongues? Leaves on trees.</p>
+                    <p><strong>Step-2:</strong> Form infinitive: "to reach" or "to eat".</p>
+                    <p><strong>Correct Answer:</strong> Giraffes use their long tongues <strong>to reach leaves</strong>.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header-flex">
+                    <h3>Exercise 10 (Why question: Tiger)</h3>
+                    <button class="toggle-btn" onclick="toggleSol('sol-ex10')">Show Solution</button>
+                </div>
+                <p><strong>Complete:</strong> ______ the tiger drink water? — ______ it is thirsty.</p>
+                <div id="sol-ex10" class="solution-box">
+                    <p><strong>Step-1:</strong> Subject is singular ("the tiger"). Action verb is "drink".</p>
+                    <p><strong>Step-2:</strong> Use auxiliary "does".</p>
+                    <p><strong>Correct Answer:</strong> <em>Does</em> the tiger drink water? — <em>Because</em> it is thirsty.</p>
+                </div>
+            </div>
+
+            <!-- ADVANCED EXERCISES -->
+            <span class="level-badge" style="background-color: var(--secondary-teal);">Advanced Level Exercises (11 to 15)</span>
+
+            <div class="card">
+                <div class="card-header-flex">
+                    <h3>Exercise 11 (Complex Purpose Formulation)</h3>
+                    <button class="toggle-btn" onclick="toggleSol('sol-ex11')">Show Solution</button>
+                </div>
+                <p><strong>Create & Complete:</strong> Write a sentence explaining why owls use their large wings and silent feathers.</p>
+                <div id="sol-ex11" class="solution-box">
+                    <p><strong>Step-1:</strong> Identify owl traits (wings/feathers) and nocturnal hunting style.</p>
+                    <p><strong>Step-2:</strong> Combine using subject + use + object + multiple infinitives.</p>
+                    <p><strong>Correct Answer:</strong> Owls use their wings and silent feathers <strong>to fly quietly and catch prey at night</strong>.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header-flex">
+                    <h3>Exercise 12 (Multi-clause Why / Because)</h3>
+                    <button class="toggle-btn" onclick="toggleSol('sol-ex12')">Show Solution</button>
+                </div>
+                <p><strong>Complete & Expand:</strong> Why do desert animals burrow underground during scorching hot days?</p>
+                <div id="sol-ex12" class="solution-box">
+                    <p><strong>Step-1:</strong> Address temperature and moisture preservation.</p>
+                    <p><strong>Step-2:</strong> Formulate complete explanatory response.</p>
+                    <p><strong>Correct Answer:</strong> Because it protects them from extreme heat and helps them stay cool.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header-flex">
+                    <h3>Exercise 13 (Infinitive of Purpose Transformation)</h3>
+                    <button class="toggle-btn" onclick="toggleSol('sol-ex13')">Show Solution</button>
+                </div>
+                <p><strong>Transform:</strong> Rewrite using an infinitive of purpose: "Kangaroos have pouches so that they can carry their babies." -> "Kangaroos use their pouches ______."</p>
+                <div id="sol-ex13" class="solution-box">
+                    <p><strong>Step-1:</strong> Locate core action ("carry their babies").</p>
+                    <p><strong>Step-2:</strong> Convert clause to infinitive phrase ("to carry their babies").</p>
+                    <p><strong>Correct Answer:</strong> Kangaroos use their pouches <strong>to carry their babies</strong>.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header-flex">
+                    <h3>Exercise 14 (Critical Habitat Query)</h3>
+                    <button class="toggle-btn" onclick="toggleSol('sol-ex14')">Show Solution</button>
+                </div>
+                <p><strong>Formulate:</strong> Create a "Why... / Because..." question and answer pair about penguins living in ice habitats.</p>
+                <div id="sol-ex14" class="solution-box">
+                    <p><strong>Step-1:</strong> Use modal or present simple for penguins ("Why do penguins live in ice habitats?").</p>
+                    <p><strong>Step-2:</strong> Formulate ecological response ("Because they have thick blubber and feathers to keep warm").</p>
+                    <p><strong>Correct Answer:</strong> <em>Why do</em> penguins live in ice? — <em>Because</em> they have blubber to keep warm.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header-flex">
+                    <h3>Exercise 15 (Advanced Synthesis)</h3>
+                    <button class="toggle-btn" onclick="toggleSol('sol-ex15')">Show Solution</button>
+                </div>
+                <p><strong>Complete:</strong> Why do chameleons change their skin color, and what do they use it for?</p>
+                <div id="sol-ex15" class="solution-box">
+                    <p><strong>Step-1:</strong> Address dual biological function (camouflage + communication).</p>
+                    <p><strong>Step-2:</strong> Combine "Because..." with infinitive phrase.</p>
+                    <p><strong>Correct Answer:</strong> Because they need survival mechanisms; they use it <strong>to hide and communicate</strong>.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: REFLECTION -->
+        <div id="reflection" class="tab-content">
+            <h2 class="section-title">Critical Reflection Questions</h2>
+            <p class="section-desc">Think deeply about these open questions and discuss them with your partner or teacher.</p>
+
+            <div class="card">
+                <h3>Reflection 1: Animal Adaptations</h3>
+                <p>Why do you think different animals in different habitats (like deserts, rainforests, and icy regions) have such different body parts? How do infinitives of purpose help us describe these survival tools?</p>
+            </div>
+
+            <div class="card">
+                <h3>Reflection 2: Cause and Effect</h3>
+                <p>When asking "Why...?" about nature, why is understanding the "Because..." explanation important for protecting wildlife and ecosystems?</p>
+            </div>
+
+            <div class="card">
+                <h3>Reflection 3: Personal Connection</h3>
+                <p>Think of an animal you love (for example, a dolphin, a hawk, or a wolf). What is one special tool or body part it uses every day, and what is its purpose?</p>
+            </div>
+        </div>
+
+        <!-- TAB 5: EVALUATION -->
+        <div id="evaluation" class="tab-content">
+            <h2 class="section-title">Formative Evaluation with Hidden Solutions</h2>
+            <p class="section-desc">Challenge yourself with these reinforcement questions. Click "Show Solution" to verify your answers.</p>
+
+            <div class="card">
+                <div class="card-header-flex">
+                    <h3>Evaluation Item 1</h3>
+                    <button class="toggle-btn" onclick="toggleSol('sol-eval1')">Show Solution</button>
+                </div>
+                <p><strong>Question:</strong> Complete with "Why" or "Because":<br>______ do birds migrate south for the winter? — ______ food is hard to find in the cold north.</p>
+                <div id="sol-eval1" class="solution-box">
+                    <p><strong>Solution:</strong> <strong>Why</strong> do birds migrate... — <strong>Because</strong> food is hard to find...</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header-flex">
+                    <h3>Evaluation Item 2</h3>
+                    <button class="toggle-btn" onclick="toggleSol('sol-eval2')">Show Solution</button>
+                </div>
+                <p><strong>Question:</strong> Formulate an infinitive of purpose sentence for how birds use their beaks to eat seeds.</p>
+                <div id="sol-eval2" class="solution-box">
+                    <p><strong>Solution:</strong> Birds use their beaks <strong>to eat seeds</strong>.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header-flex">
+                    <h3>Evaluation Item 3</h3>
+                    <button class="toggle-btn" onclick="toggleSol('sol-eval3')">Show Solution</button>
+                </div>
+                <p><strong>Question:</strong> True or False: We use "Because" to ask questions and "Why" to give answers. Explain why.</p>
+                <div id="sol-eval3" class="solution-box">
+                    <p><strong>Solution:</strong> <strong>False</strong>. We use "Why" to <em>ask</em> questions and "Because" to <em>give</em> answers/reasons.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="footer-note">
+        Colegio Montano — Digital Learning Environment | Educational Web Developer & Instructional Design
+    </div>
+</div>
+
+<script>
+    // Tab switching logic
+    function switchTab(tabId) {
+        const contents = document.querySelectorAll('.tab-content');
+        contents.forEach(content => content.classList.remove('active'));
+
+        const buttons = document.querySelectorAll('.tab-btn');
+        buttons.forEach(btn => btn.classList.remove('active'));
+
+        document.getElementById(tabId).classList.add('active');
+        event.currentTarget.classList.add('active');
+    }
+
+    // Toggle solution visibility
+    function toggleSol(solId) {
+        const solBox = document.getElementById(solId);
+        const btn = solBox.previousElementSibling.querySelector('.toggle-btn') || event.currentTarget;
+        
+        if (solBox.classList.contains('show')) {
+            solBox.classList.remove('show');
+            btn.textContent = "Show Solution";
+        } else {
+            solBox.classList.add('show');
+            btn.textContent = "Hide Solution";
+        }
+    }
+
+    // Fullscreen toggle logic using Fullscreen API
+    function toggleFullscreen() {
+        const container = document.getElementById('boardContainer');
+        if (!document.fullscreenElement) {
+            if (container.requestFullscreen) {
+                container.requestFullscreen();
+            } else if (container.webkitRequestFullscreen) {
+                container.webkitRequestFullscreen();
+            } else if (container.msRequestFullscreen) {
+                container.msRequestFullscreen();
+            }
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
